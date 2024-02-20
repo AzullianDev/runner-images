@@ -104,39 +104,39 @@ jobs:
       PACKER_LOG: 1
       PACKER_LOG_PATH: "$(Agent.TempDirectory)/packer-log.txt"
 
-  - task: PowerShell@2
-    displayName: 'Copy image artifacts to the separate directory'
-    inputs:
-      targetType: 'inline'
-      script: |
-        $ImageType = "${{ parameters.image_type }}"
-        $rootDirectoryName = if ($ImageType.StartsWith("ubuntu")) { "ubuntu" } else { "windows" }
-        $rootDirectoryPath = Join-Path "images" $rootDirectoryName | Resolve-Path
+  #- task: PowerShell@2
+  #  displayName: 'Copy image artifacts to the separate directory'
+  #  inputs:
+  #    targetType: 'inline'
+  #    script: |
+  #      $ImageType = "${{ parameters.image_type }}"
+  #      $rootDirectoryName = if ($ImageType.StartsWith("ubuntu")) { "ubuntu" } else { "windows" }
+  #      $rootDirectoryPath = Join-Path "images" $rootDirectoryName | Resolve-Path
+#
+  #      $readmePath = Join-Path $rootDirectoryPath "${{ parameters.image_readme_name }}"
+  #      $softwareReportPath = Join-Path $rootDirectoryPath "software-report.json"
+#
+  #      Copy-Item -Path $readmePath -Destination "$(Build.ArtifactStagingDirectory)/"
+  #      if (Test-Path $softwareReportPath) {
+  #          Copy-Item -Path $softwareReportPath -Destination "$(Build.ArtifactStagingDirectory)/"
+  #      }
 
-        $readmePath = Join-Path $rootDirectoryPath "${{ parameters.image_readme_name }}"
-        $softwareReportPath = Join-Path $rootDirectoryPath "software-report.json"
+  #- task: PowerShell@2
+  #  displayName: 'Print markdown software report'
+  #  inputs:
+  #    targetType: 'inline'
+  #    script: |
+  #      Get-Content -Path "$(Build.ArtifactStagingDirectory)/${{ parameters.image_readme_name }}"
 
-        Copy-Item -Path $readmePath -Destination "$(Build.ArtifactStagingDirectory)/"
-        if (Test-Path $softwareReportPath) {
-            Copy-Item -Path $softwareReportPath -Destination "$(Build.ArtifactStagingDirectory)/"
-        }
-
-  - task: PowerShell@2
-    displayName: 'Print markdown software report'
-    inputs:
-      targetType: 'inline'
-      script: |
-        Get-Content -Path "$(Build.ArtifactStagingDirectory)/${{ parameters.image_readme_name }}"
-
-  - task: PowerShell@2
-    displayName: 'Print json software report'
-    inputs:
-      targetType: 'inline'
-      script: |
-        $softwareReportPath = "$(Build.ArtifactStagingDirectory)/software-report.json"
-        if (Test-Path $softwareReportPath) {
-            Get-Content -Path $softwareReportPath
-        }
+  #- task: PowerShell@2
+  #  displayName: 'Print json software report'
+  #  inputs:
+  #    targetType: 'inline'
+  #    script: |
+  #      $softwareReportPath = "$(Build.ArtifactStagingDirectory)/software-report.json"
+  #      if (Test-Path $softwareReportPath) {
+  #          Get-Content -Path $softwareReportPath
+  #      }
 
   - task: PublishBuildArtifacts@1
     inputs:
