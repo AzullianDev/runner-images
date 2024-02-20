@@ -76,7 +76,7 @@ jobs:
         Write-Host "##vso[task.setvariable variable=TemplateDirectoryPath;]$TemplateDirectoryPath"
         Write-Host "##vso[task.setvariable variable=TemplatePath;]$TemplatePath"
 
-        $ManagedImageName = if (-not [string]::IsNullOrWhiteSpace(${{ parameters.image_name }})) { ${{ parameters.image_name }} } else { "${{ parameters.image_type }}-$(Build.BuildId)" }
+        $ManagedImageName = if ([string]::IsNullOrWhiteSpace("${{ parameters.image_name }}")) { "${{ parameters.image_type }}-$(Build.BuildId)" } else { "${{ parameters.image_name }}" }
         Write-Host "##vso[task.setvariable variable=ManagedImageName;]$ManagedImageName"
 
         $TempResourceGroupName = "packer-temp-$ManagedImageName"
