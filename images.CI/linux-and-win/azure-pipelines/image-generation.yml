@@ -12,6 +12,9 @@ parameters:
   - name: image_type
     type: string
 
+  - name: image_name
+    type: string
+
   - name: image_template_name
     type: string
 
@@ -73,7 +76,7 @@ jobs:
         Write-Host "##vso[task.setvariable variable=TemplateDirectoryPath;]$TemplateDirectoryPath"
         Write-Host "##vso[task.setvariable variable=TemplatePath;]$TemplatePath"
 
-        $ManagedImageName = "${{ parameters.image_type }}-$(Build.BuildId)"
+        $ManagedImageName = if (-not [string]::IsNullOrWhiteSpace(${{ parameters.image_name }})) { ${{ parameters.image_name }} } else { "${{ parameters.image_type }}-$(Build.BuildId)" }
         Write-Host "##vso[task.setvariable variable=ManagedImageName;]$ManagedImageName"
 
         $TempResourceGroupName = "packer-temp-$ManagedImageName"
